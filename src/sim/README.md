@@ -1,14 +1,29 @@
+# Bike Simulation
+
+## Running the Sim
+
+Start containers and run the sim:
+
 1. `docker compose up`
 2. `docker exec -it --user root autobike_dev bash`
 3. `build`
 4. `ros2 launch sim robot_launch.py`
-5. Give Webot a minute
-6. Enable "Use Rosetta for x86/amd64 emulation on Apple Silicon", otherwise it is horribly slow (still is extremely slow)
-7. `docker exec -it --user root autobike_dev bash` for another terminal
-8. `ros2 topic pub /cmd_vel geometry_msgs/Twist  "linear: { x: 0.1 }"`
 
-Following THIS tutorial!
+Open the GUI
 
-<https://docs.ros.org/en/humble/Tutorials/Advanced/Simulators/Webots/Setting-Up-Simulation-Webots-Basic.html>
+5. `http://localhost:8080/vnc.html`
+6. Give [Webot](https://cyberbotics.com/) a minute
 
-other versions of ROS WILL NOT WORK
+Send commands to the driver
+
+1. `docker exec -it --user root autobike_dev bash` for another terminal
+v TODO: update robot driver to listen to output of pure pursuit container :D
+1. `ros2 topic pub /cmd_vel geometry_msgs/Twist  "linear: { x: 0.1 }"`
+
+## Tips
+
+Enable "Use Rosetta for x86/amd64 emulation on Apple Silicon" in "Settings > Features in Development", otherwise it is horribly slow (still is extremely slow, since we are emulating a different architecture and also containerized--I anticipate the biggest hit is the emulation, and plan on running on the Jetson to see how much faster it is on native hardware)
+
+## Resources
+
+* Following [this](https://docs.ros.org/en/humble/Tutorials/Advanced/Simulators/Webots/Setting-Up-Simulation-Webots-Basic.html) tutorial! other versions of ROS WILL NOT WORK!!!

@@ -3,4 +3,22 @@
     <webots>
         <plugin type="sim.my_robot_driver.MyRobotDriver" />
     </webots>
+
+    <!-- Robot Body -->
+    <children>
+        <!-- Define the LIDAR -->
+        <lidar name="LDS-01">
+            <!-- Position and Orientation -->
+            <translation>0 0 0.2</translation> <!-- Position relative to the robot -->
+            <rotation>0 1 0 0</rotation> <!-- Orientation of the LIDAR -->
+
+            <!-- LIDAR Parameters -->
+            <horizontalResolution>0.5</horizontalResolution> <!-- Angle resolution in degrees -->
+            <numberOfLayers>1</numberOfLayers> <!-- Single-layer LIDAR -->
+            <fieldOfView>3.14</fieldOfView> <!-- Field of view in radians (180 degrees) -->
+            <maxRange>30</maxRange> <!-- Maximum range in meters -->
+            <minRange>0.1</minRange> <!-- Minimum range in meters -->
+            <updateFrequency>10</updateFrequency> <!-- Update rate in Hz -->
+        </lidar>
+    </children>
 </robot>
