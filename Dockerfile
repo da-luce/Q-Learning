@@ -3,7 +3,7 @@ ARG ROS_DISTRO=humble
 
 # Base image (Humble is the LTS version for Ubuntu 22.04)
 # IMPORTANT: pin to a specific hash!
-FROM ros:${ROS_DISTRO}@sha256:80a4f6329aad64f14b600133cb3fd279d0bf666feeca5abef3f10bb41b0916ea
+FROM --platform=linux/amd64 ros:${ROS_DISTRO}
 
 # Set working directory
 ENV WORKDIR /usr/local/autobike
@@ -16,7 +16,7 @@ RUN apt-get update --fix-missing
 RUN apt-get install -y vim
 
 # Install pip (updating is important!)
-RUN apt-get install -y python3-pip=22.0.2+dfsg-1ubuntu0.4 && pip3 install --upgrade pip
+RUN apt-get install -y python3-pip && pip3 install --upgrade pip
 
 # Setup ROSboard
 RUN apt-get install -y \
@@ -37,6 +37,9 @@ RUN apt-get update && apt-get install -y x11-apps
 RUN apt install -y \
     ros-humble-rviz2 \
     libogre-1.12-dev
+
+# Webots
+RUN apt install -y ros-humble-webots-ros2
 
 # GUI backend for python (required by Matplotlib)
 RUN apt-get install -y python3.10-tk

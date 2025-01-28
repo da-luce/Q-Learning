@@ -3,12 +3,11 @@ services:
   # Autobike development
   autobike:
     container_name: autobike_dev
+    platform: linux/amd64
     image: autobike
     hostname: bike_dev
     build:
       context: .
-    # ports:
-    #   - "5900:5900"  # Expose VNC server for NoVNC to connect
     stdin_open: true
     tty: true
     command: bash
