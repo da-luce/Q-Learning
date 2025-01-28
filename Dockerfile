@@ -30,21 +30,13 @@ RUN apt-get install -y \
     libgdal-dev=3.4.1+dfsg-1build4 \
     g++=4:11.2.0-1ubuntu1
 
-# RDP stuff
-RUN apt-get update && \
-    apt-get install -y xfce4 xfce4-terminal xrdp && \
-    echo "xfce4-session" > /etc/skel/.xsession && \
-    mkdir -p /var/run/dbus && \
-    apt-get clean
+# Install xeyes to test NoVNC
+RUN apt-get update && apt-get install -y x11-apps
 
-# NoVNC
-RUN apt-get update && apt-get install -y \
-    x11vnc \
-    xterm \
-    fluxbox
-
-ENV DISPLAY=:0
-CMD x11vnc -display :0 -forever -nopw -listen 0.0.0.0 -rfbport 3389
+# Install rviz2
+RUN apt install -y \
+    ros-humble-rviz2 \
+    libogre-1.12-dev
 
 # GUI backend for python (required by Matplotlib)
 RUN apt-get install -y python3.10-tk

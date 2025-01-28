@@ -7,70 +7,32 @@ services:
     hostname: bike_dev
     build:
       context: .
-    ports:
-      - 3389:3389 # VNC port
+    # ports:
+    #   - "5900:5900"  # Expose VNC server for NoVNC to connect
     stdin_open: true
     tty: true
     command: bash
     networks:
-      - rosnet
+      - x11
     environment:
-      - DISPLAY=:0
+      - DISPLAY=novnc:0.0
+    depends_on:
+      - novnc
     volumes:
       - ./:/usr/local/autobike
 
-  # ROSboard
-  rosboard:
-    container_name: rosboard
-    image: autobike
-    hostname: bike_dev
-    command: bash -c "cd /usr/local/rosboard/ && ./run"
-    ports:
-      - 8888:8888
-    networks:
-      - rosnet
-    depends_on:
-      - autobike
-
-   # Guacamole Server
-  guacamole:
-    image: guacamole/guacamole
-    depends_on:
-      - guacd
+  # NoVNC for x11 apps
+  novnc:
+    image: theasp/novnc:latest
     environment:
-      GUACD_HOSTNAME: guacd
-      GUACAMOLE_HOME: /etc/guacamole
+      # Adjust to your screen size
+      - DISPLAY_WIDTH=1600
+      - DISPLAY_HEIGHT=968
+      - RUN_XTERM=no
     ports:
       - "8080:8080"
     networks:
-      - rosnet
-    volumes:
-      - ./user-mapping.xml:/etc/guacamole/user-mapping.xml
-    platform: linux/amd64
-
-  # Guacamole Proxy Daemon
-  guacd:
-    image: guacamole/guacd
-    networks:
-      - rosnet
-    platform: linux/amd64
-
-  # NoVNC Service (for web-based access to VNC)
-  novnc:
-    image: theasp/novnc:latest
-    container_name: novnc_container
-    platform: linux/amd64
-    environment:
-      - DISPLAY_WIDTH=3000
-      - DISPLAY_HEIGHT=1800
-      - RUN_XTERM=no
-    ports:
-      - "8081:8080"  # NoVNC runs on port 8080 inside the container, exposed as 8081 on the host
-    networks:
-      - rosnet
-    depends_on:
-      - autobike  # Ensure NoVNC waits for autobike container
-    restart: unless-stopped
+      - x11
 
 networks:
-  rosnet:
+  x11:
