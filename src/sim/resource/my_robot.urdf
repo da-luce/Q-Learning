@@ -7,7 +7,7 @@
     <!-- Robot Body -->
     <children>
         <!-- Define the LIDAR -->
-        <lidar name="LDS-01">
+        <lidar name="LDS_01">
             <!-- Position and Orientation -->
             <translation>0 0 0.2</translation> <!-- Position relative to the robot -->
             <rotation>0 1 0 0</rotation> <!-- Orientation of the LIDAR -->

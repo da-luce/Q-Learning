@@ -1,5 +1,6 @@
 import rclpy
 from geometry_msgs.msg import Twist
+from sensor_msgs.msg import LaserScan
 
 HALF_DISTANCE_BETWEEN_WHEELS = 0.045
 WHEEL_RADIUS = 0.025
@@ -22,6 +23,13 @@ class MyRobotDriver:
         rclpy.init(args=None)
         self.__node = rclpy.create_node('my_robot_driver')
         self.__node.create_subscription(Twist, 'cmd_vel', self.__cmd_vel_callback, 1)
+        self.__node.create_subscription(LaserScan, '/LDS_01/scan', self.__lidar_callback, 1)
+
+    def __lidar_callback(self, scan):
+        # Process LIDAR data here
+        ranges = scan.ranges  # LIDAR distance measurements
+        # Example: Print the minimum distance detected
+        print(f"Closest obstacle: {min(ranges)} meters")
 
     def __cmd_vel_callback(self, twist):
         self.__target_twist = twist
