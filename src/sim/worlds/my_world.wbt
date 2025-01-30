@@ -162,3 +162,41 @@ Robot {
   name "my_robot"
 }
 
+# Environment elements
+Solid {
+  translation 0.5 0.5 0.05  # Position in the world (X, Y, Z)
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 1 0 0  # Red color
+        roughness 1
+        metalness 0
+      }
+      geometry Box {
+        size 0.1 0.1 0.1  # Width, Depth, Height
+      }
+    }
+  ]
+  name "box1"
+  boundingObject Box { size 0.1 0.1 0.1 }  # Collision box
+  physics Physics { density 100 }  # Enables physics simulation
+}
+
+Solid {
+  translation -0.5 -0.5 0.05
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0 1 0  # Green color
+        roughness 1
+        metalness 0
+      }
+      geometry Box {
+        size 0.2 0.2 0.2
+      }
+    }
+  ]
+  name "box2"
+  boundingObject Box { size 0.2 0.2 0.2 }
+  physics Physics { density 100 }
+}
