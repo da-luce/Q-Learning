@@ -23,7 +23,7 @@ class MyRobotDriver:
         rclpy.init(args=None)
         self.__node = rclpy.create_node('my_robot_driver')
         self.__node.create_subscription(Twist, 'cmd_vel', self.__cmd_vel_callback, 1)
-        self.__node.create_subscription(LaserScan, '/LDS_01/scan', self.__lidar_callback, 1)
+        # self.__node.create_subscription(LaserScan, '/LDS_01/scan', self.__lidar_callback, 1)
 
     def __lidar_callback(self, scan):
         # Process LIDAR data here
