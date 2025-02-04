@@ -1,0 +1,14 @@
+<launch>
+    <!-- Launch LiDAR Node from unitree_lidar_ros without namespace -->
+    <include file="$(find unitree_lidar_ros)/launch/run.launch" />
+
+    <!-- Launch the Occupancy Grid Generation Node --> 
+    <include file="$(find pointcloud_to_grid)/launch/demo.launch" />
+
+
+    <!-- Launch RViz for Visualization -->
+    <group ns="rviz">
+        <include file="$(find pointcloud_to_grid)/launch/rviz.launch" />
+    </group>
+</launch>
+
