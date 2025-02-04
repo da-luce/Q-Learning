@@ -26,6 +26,59 @@ class DijkstraPathPlanner(Node):
         self.publisher_ = self.create_publisher(Path, 'Path', 10)
         self.subscription = self.create_subscription(
             OccupancyGrid, 'occupancy_grid', self.grid_callback, 10)
+        self.subscription_waypoints = self.create_subscription(
+        Path, '/planning/waypoints', self.waypoints_callback, 10
+        )
+    def waypoints_callback(self, msg: Path):
+        """
+        Callback function to process waypoints and update the goal position.
+        """
+        if not msg.poses:
+            self.get_logger().error("Received empty waypoints path.")
+            return
+
+        # Extract the last waypoint as the new goal
+        last_pose = msg.poses[-1]
+        self.end = (int(last_pose.pose.position.x), int(last_pose.pose.position.y))
+
+        self.get_logger().info(f"Updated goal to {self.end} from waypoints.")
+
+        # Run Dijkstra if grid is available
+        if self.grid:
+            path = self.dijkstra(self.start, self.end)
+            if path:
+                self.path_callback(path)
+            else:
+                self.get_logger().error("No path found from start to end")
+
+    # Map latitude and longitude of destination to grid indices
+
+    def gps_callbacks(self, msg:Path):
+        if not msg.poses:
+            self.get_logger().error("Received empty waypoints path.")
+            return
+
+        last_pose = msg.poses[-1]
+        lat_dest =int(last_pose.pose.position.x)
+        lon_dest = int(last_pose.pose.position.y)
+        lat_bike,lon_bike = 42.442046, -76.493822
+        lat_diff = lat_dest - lat_bike
+        lon_diff = lon_dest - lon_bike
+
+        grid_size = 10
+        lat_min, lat_max = 40.0, 41.0  # example latitudes
+        lon_min, lon_max = -74.0, -73.0  # example longitudes
+        row_diff = int((lat_diff / (lat_max - lat_min)) * (grid_size - 1))
+        col_diff = int((lon_diff / (lon_max - lon_min)) * (grid_size - 1))
+
+        target_row = 5 + row_diff
+        target_col = 5 + col_diff
+
+        target_row = max(0, min(9, target_row))
+        target_col = max(0, min(9, target_col))
+
+        return target_row, target_col
+
 
         self.get_logger().info("Dijkstra path planner node started")
 
