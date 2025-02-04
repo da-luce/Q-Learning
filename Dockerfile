@@ -3,7 +3,7 @@ ARG ROS_DISTRO=humble
 
 # Base image (Humble is the LTS version for Ubuntu 22.04)
 # IMPORTANT: pin to a specific hash!
-FROM --platform=linux/amd64 ros:${ROS_DISTRO}
+FROM ros:${ROS_DISTRO}
 
 # Set working directory
 ENV WORKDIR /usr/local/autobike
